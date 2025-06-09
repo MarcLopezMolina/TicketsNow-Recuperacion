@@ -50,6 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <span class="show-password" onclick="togglePassword()">MOSTRAR</span>
             </div>
 
+            <div class="input-group">
+                <input type="text" name="ciudad" placeholder="Ciudad" required>
+            </div>
+
             <div class="buttons">
                 <button type="submit" class="button">Acceder</button>
             </div>

@@ -12,7 +12,7 @@ $controller = new UserController();
 // Si se ha enviado el formulario de borrar cuenta
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_account'])) {
     $controller->deleteUser($_SESSION['id_user']);
-    exit(); // Este exit es redundante pero asegura que no sigue procesando más HTML
+    exit();
 }
 
 try {
@@ -75,6 +75,7 @@ if (!$user) {
 $name = $user['name'];
 $surname = $user['surname'];
 $email = $user['email'];
+$city = $user['city']; // 👈 NUEVO
 $photo = $user['profile_photo'] ?: '../../media/img/Interfaces/user_icon.png';
 $role = $user['id_role'];
 ?>
@@ -160,6 +161,10 @@ $role = $user['id_role'];
             <label>Correo electrónico</label>
             <span><?php echo htmlspecialchars($email); ?></span>
         </div>
+        <div class="info-group"> <!-- 👈 NUEVO -->
+            <label>Ciudad</label>
+            <span><?php echo htmlspecialchars($city); ?></span>
+        </div>
 
         <?php if ($role == 3): ?>
             <form action="profile.php" method="post" enctype="multipart/form-data">
@@ -171,16 +176,13 @@ $role = $user['id_role'];
             </form>
         <?php endif; ?>
 
-        <!-- Formulario para borrar cuenta -->
         <form method="post" onsubmit="return confirm('¿Estás seguro de que deseas borrar tu cuenta? Esta acción no se puede deshacer.');">
             <input type="hidden" name="delete_account" value="1">
             <button type="submit" class="profile-delete-btn" style="background-color:#e74c3c; color:white; margin-top:20px;">
                 🗑️ Borrar cuenta
             </button>
         </form>
-
     </div>
 </div>
 </body>
-
 </html>

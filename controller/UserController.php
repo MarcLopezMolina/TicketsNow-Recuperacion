@@ -17,7 +17,7 @@ class UserController
             $this->conn = new PDO("mysql:host=localhost;dbname=ticketsnow", "root", "");
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // Crear tabla users si no existe (opcional)
+            // Crear tabla users si no existe
             $this->conn->exec("
                 CREATE TABLE IF NOT EXISTS users (
                     id_user INT AUTO_INCREMENT PRIMARY KEY,
@@ -25,6 +25,7 @@ class UserController
                     password VARCHAR(255) NOT NULL,
                     name VARCHAR(100),
                     surname VARCHAR(100),
+                    city VARCHAR(100) NOT NULL,
                     id_role INT,
                     profile_photo VARCHAR(255)
                 )
@@ -34,40 +35,46 @@ class UserController
         }
     }
 
-
-    public function login(): string
-    {
-        $error = "";
-
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $email = $_POST["email"] ?? "";
-            $password = $_POST["password"] ?? "";
-
-            if (empty($email) || empty($password)) {
-                return "Todos los campos son obligatorios.";
-            }
-
-            $stmt = $this->conn->prepare("SELECT id_user, name, surname, id_role, password FROM users WHERE email = ?");
-            $stmt->execute([$email]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($user && password_verify($password, $user['password'])) {
-                $_SESSION['logged_in'] = true;
-                $_SESSION['id_user'] = $user['id_user'];
-                $_SESSION['user_name'] = $user['name'];
-                $_SESSION['user_surname'] = $user['surname'];
-                $_SESSION['user_email'] = $email;
-                $_SESSION['id_role'] = $user['id_role'];
-
-                header("Location: ./profile.php");
-                exit;
-            }
-
-            $error = "Email o contraseña incorrectos.";
-        }
-
-        return $error;
+    public function login() {
+    if (empty($_POST['email']) || empty($_POST['password']) || empty($_POST['ciudad'])) {
+        return "Todos los campos son obligatorios";
     }
+
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $ciudadInput = trim($_POST['ciudad']);
+
+    try {
+        $pdo = new PDO("mysql:host=localhost;dbname=ticketsnow;charset=utf8", "root", "");
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute([':email' => $email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['password'])) {
+            // Validar ciudad
+            if (strcasecmp($user['city'], $ciudadInput) !== 0) {
+                return "La ciudad no coincide con la registrada en tu cuenta.";
+            }
+
+            // Iniciar sesión
+            $_SESSION['logged_in'] = true;
+            $_SESSION['id_user'] = $user['id_user'];
+            $_SESSION['name'] = $user['name'];
+            $_SESSION['id_role'] = $user['id_role'];
+            $_SESSION['city'] = $user['city'];
+
+            header('Location: profile.php');
+            exit();
+        } else {
+            return "Correo o contraseña incorrectos.";
+        }
+    } catch (PDOException $e) {
+        return "Error de conexión: " . $e->getMessage();
+    }
+}
+
 
     public function emailExists($email): bool
     {
@@ -104,7 +111,8 @@ class UserController
     {
         if (
             empty($data['email']) || empty($data['password']) ||
-            empty($data['nombre']) || empty($data['apellido'])
+            empty($data['nombre']) || empty($data['apellido']) ||
+            empty($data['ciudad'])
         ) {
             return "Todos los campos son obligatorios.";
         }
@@ -113,6 +121,7 @@ class UserController
         $password = password_hash($data['password'], PASSWORD_DEFAULT);
         $name = $data['nombre'];
         $surname = $data['apellido'];
+        $city = $data['ciudad'];
         $profilePhoto = '';
 
         try {
@@ -123,8 +132,11 @@ class UserController
                 return "El correo electrónico ya está registrado.";
             }
 
-            $stmt = $this->conn->prepare("INSERT INTO users (email, password, name, surname, id_role, profile_photo) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$email, $password, $name, $surname, $role_id, $profilePhoto]);
+            $stmt = $this->conn->prepare("
+                INSERT INTO users (email, password, name, surname, city, id_role, profile_photo)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ");
+            $stmt->execute([$email, $password, $name, $surname, $city, $role_id, $profilePhoto]);
 
             header("Location: login.php");
             exit;
@@ -164,5 +176,4 @@ class UserController
             die("Error al eliminar el usuario: " . $e->getMessage());
         }
     }
-
 }

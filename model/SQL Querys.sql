@@ -1,15 +1,19 @@
+-- Crear base de datos
 CREATE DATABASE IF NOT EXISTS ticketsnow;
 USE ticketsnow;
 
+-- Crear tabla de roles
 CREATE TABLE IF NOT EXISTS roles (
     id_role INT AUTO_INCREMENT PRIMARY KEY,
     rol_name VARCHAR(25) NOT NULL
 );
 
+-- Crear tabla de usuarios con campo ciudad
 CREATE TABLE IF NOT EXISTS users (
     id_user INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(25) NOT NULL,
     surname VARCHAR(25) NOT NULL,
+    city VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     id_role INT NOT NULL,
@@ -17,13 +21,15 @@ CREATE TABLE IF NOT EXISTS users (
     FOREIGN KEY (id_role) REFERENCES roles(id_role)
 );
 
+-- Crear tabla de artistas
 CREATE TABLE IF NOT EXISTS artists (
     id_artist INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
     genre VARCHAR(100),
     banner_image VARCHAR(255)
-)
+);
 
+-- Crear tabla de conciertos
 CREATE TABLE IF NOT EXISTS concerts (
     id_concert INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -33,7 +39,7 @@ CREATE TABLE IF NOT EXISTS concerts (
     price DECIMAL(10,2) NOT NULL,
     id_artist INT,
     FOREIGN KEY (id_artist) REFERENCES artists(id_artist)
-)
+);
 
 -- Insertar roles
 INSERT INTO roles (rol_name) VALUES ('user'), ('artist'), ('admin');
@@ -60,7 +66,7 @@ INSERT INTO artists (name, genre, banner_image) VALUES
     ('TWICE', 'K-Pop', '../../media/img/concert_banners/twice.jpg'),
     ('YOASOBI', 'J-Pop', '../../media/img/concert_banners/yoasobi.jpg');
 
--- Verificar
+-- Verificar inserciones
 SELECT * FROM users;
 SELECT * FROM concerts;
 SELECT * FROM artists;
