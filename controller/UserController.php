@@ -158,7 +158,8 @@ class UserController
         } 
         else
         {
-            echo($data['email'] . " is not a valid email address");
+            echo("'" . $data['email'] . "'" . " is not a valid email address.");
+            echo("Example of a correct email: marc@gmail.com");
         }
     }
 
