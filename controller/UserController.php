@@ -108,7 +108,7 @@ class UserController
         return $this->register($data, 3);
     }
 
-    // ✅ NUEVO CAMPO DE CIUDAD ✅
+    // ✅ NUEVO CAMPO DE CIUDAD + VALIDACIÓN DE EMAIL + REGEX EN LA CONTRASEÑA ✅
     private function register($data, $role_id)
     {
         if (empty($data['email']) || empty($data['password']) || empty($data['nombre']) || empty($data['apellido']) || empty($data['ciudad'])) 
@@ -117,13 +117,22 @@ class UserController
         }
 
         $email = $data['email'];
-        $password = password_hash($data['password'], PASSWORD_DEFAULT);
+        $rawPassword = $data['password'];
+
+        // ✅ Validación de contraseña: exactamente 6 caracteres y al menos un número
+        if (!preg_match('/^(?=.*\d)[A-Za-z\d]{6}$/', $rawPassword)) 
+        {
+            return "La contraseña debe tener exactamente 6 caracteres y al menos un número.";
+        }
+
+        $password = password_hash($rawPassword, PASSWORD_DEFAULT);
         $name = $data['nombre'];
         $surname = $data['apellido'];
         $city = $data['ciudad'];
         $profilePhoto = '';
 
-        try {
+        try 
+        {
             $check = $this->conn->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
             $check->execute([$email]);
 
@@ -139,7 +148,9 @@ class UserController
 
             header("Location: login.php");
             exit;
-        } catch (PDOException $e) {
+        } 
+        catch (PDOException $e) 
+        {
             return "Error al registrar: " . $e->getMessage();
         }
     }
