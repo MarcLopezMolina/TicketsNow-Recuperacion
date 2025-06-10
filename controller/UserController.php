@@ -35,6 +35,7 @@ class UserController
         }
     }
 
+    // ✅ NUEVO CAMPO DE CIUDAD ✅
     public function login() {
     if (empty($_POST['email']) || empty($_POST['password']) || empty($_POST['ciudad'])) {
         return "Todos los campos son obligatorios";
@@ -107,6 +108,7 @@ class UserController
         return $this->register($data, 3);
     }
 
+    // ✅ NUEVO CAMPO DE CIUDAD ✅
     private function register($data, $role_id)
     {
         if (

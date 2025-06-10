@@ -75,7 +75,8 @@ if (!$user) {
 $name = $user['name'];
 $surname = $user['surname'];
 $email = $user['email'];
-$city = $user['city']; // 👈 NUEVO
+// ✅ NUEVO CAMPO DE CIUDAD ✅
+$city = $user['city']; 
 $photo = $user['profile_photo'] ?: '../../media/img/Interfaces/user_icon.png';
 $role = $user['id_role'];
 ?>
@@ -161,7 +162,9 @@ $role = $user['id_role'];
             <label>Correo electrónico</label>
             <span><?php echo htmlspecialchars($email); ?></span>
         </div>
-        <div class="info-group"> <!-- 👈 NUEVO -->
+        
+        <!--✅ NUEVO CAMPO DE CIUDAD ✅-->
+        <div class="info-group">
             <label>Ciudad</label>
             <span><?php echo htmlspecialchars($city); ?></span>
         </div>
