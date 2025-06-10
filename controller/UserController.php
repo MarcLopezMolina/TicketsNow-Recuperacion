@@ -37,7 +37,6 @@ class UserController
         }
     }
 
-    // ✅ NUEVO CAMPO DE CIUDAD ✅
     public function login() 
     {
         if (empty($_POST['email']) || empty($_POST['password'])) 
@@ -116,31 +115,43 @@ class UserController
             return "Todos los campos son obligatorios.";
         }
 
-        $email = $data['email'];
-        $password = password_hash($data['password'], PASSWORD_DEFAULT);
-        $name = $data['nombre'];
-        $surname = $data['apellido'];
-        $city = $data['ciudad'];
-        $profilePhoto = '';
+        //Validación de email #FIX 1
+        if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) 
+        {
+            $email = $data['email'];
+            $password = password_hash($data['password'], PASSWORD_DEFAULT);
+            $name = $data['nombre'];
+            $surname = $data['apellido'];
+            $city = $data['ciudad'];
+            $profilePhoto = '';
 
-        try {
-            $check = $this->conn->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
-            $check->execute([$email]);
+            try 
+            {
+                $check = $this->conn->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
+                $check->execute([$email]);
 
-            if ($check->fetchColumn() > 0) {
-                return "El correo electrónico ya está registrado.";
+                if ($check->fetchColumn() > 0) 
+                {
+                    return "El correo electrónico ya está registrado.";
+                }
+
+                $stmt = $this->conn->prepare("
+                    INSERT INTO users (email, password, name, surname, city, id_role, profile_photo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                ");
+                $stmt->execute([$email, $password, $name, $surname, $city, $role_id, $profilePhoto]);
+
+                header("Location: login.php");
+                exit;
+            } 
+            catch (PDOException $e) 
+            {
+                return "Error al registrar: " . $e->getMessage();
             }
-
-            $stmt = $this->conn->prepare("
-                INSERT INTO users (email, password, name, surname, city, id_role, profile_photo)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ");
-            $stmt->execute([$email, $password, $name, $surname, $city, $role_id, $profilePhoto]);
-
-            header("Location: login.php");
-            exit;
-        } catch (PDOException $e) {
-            return "Error al registrar: " . $e->getMessage();
+        } 
+        else 
+        {
+            echo($data['email'] . " is not a valid email address");
         }
     }
 
