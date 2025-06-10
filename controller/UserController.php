@@ -1,4 +1,3 @@
-<!-- TEST -->
 <?php
 class UserController
 {
