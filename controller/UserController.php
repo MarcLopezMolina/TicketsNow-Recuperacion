@@ -5,7 +5,8 @@ class UserController
 
     public function __construct()
     {
-        try {
+        try 
+        {
             // Conectar sin base de datos primero
             $pdo = new PDO("mysql:host=localhost", "root", "");
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -30,52 +31,51 @@ class UserController
                     profile_photo VARCHAR(255)
                 )
             ");
-        } catch (PDOException $e) {
+        } catch (PDOException $e) 
+        {
             die("Connection failed: " . $e->getMessage());
         }
     }
 
     // ✅ NUEVO CAMPO DE CIUDAD ✅
-    public function login() {
-    if (empty($_POST['email']) || empty($_POST['password']) || empty($_POST['ciudad'])) {
-        return "Todos los campos son obligatorios";
-    }
-
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-    $ciudadInput = trim($_POST['ciudad']);
-
-    try {
-        $pdo = new PDO("mysql:host=localhost;dbname=ticketsnow;charset=utf8", "root", "");
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->execute([':email' => $email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user && password_verify($password, $user['password'])) {
-            // Validar ciudad
-            if (strcasecmp($user['city'], $ciudadInput) !== 0) {
-                return "La ciudad no coincide con la registrada en tu cuenta.";
-            }
-
-            // Iniciar sesión
-            $_SESSION['logged_in'] = true;
-            $_SESSION['id_user'] = $user['id_user'];
-            $_SESSION['name'] = $user['name'];
-            $_SESSION['id_role'] = $user['id_role'];
-            $_SESSION['city'] = $user['city'];
-
-            header('Location: profile.php');
-            exit();
-        } else {
-            return "Correo o contraseña incorrectos.";
+    public function login() 
+    {
+        if (empty($_POST['email']) || empty($_POST['password'])) 
+        {
+            return "Todos los campos son obligatorios";
         }
-    } catch (PDOException $e) {
-        return "Error de conexión: " . $e->getMessage();
-    }
-}
 
+        $email = trim($_POST['email']);
+        $password = $_POST['password'];
+
+        try 
+        {
+            $pdo = new PDO("mysql:host=localhost;dbname=ticketsnow;charset=utf8", "root", "");
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->execute([':email' => $email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user && password_verify($password, $user['password'])) 
+            {
+                // Iniciar sesión
+                $_SESSION['logged_in'] = true;
+                $_SESSION['id_user'] = $user['id_user'];
+                $_SESSION['name'] = $user['name'];
+                $_SESSION['id_role'] = $user['id_role'];
+
+                header('Location: profile.php');
+                exit();
+            } else {
+                return "Correo o contraseña incorrectos.";
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            return "Error de conexión: " . $e->getMessage();
+        }
+    }
 
     public function emailExists($email): bool
     {
@@ -111,11 +111,8 @@ class UserController
     // ✅ NUEVO CAMPO DE CIUDAD ✅
     private function register($data, $role_id)
     {
-        if (
-            empty($data['email']) || empty($data['password']) ||
-            empty($data['nombre']) || empty($data['apellido']) ||
-            empty($data['ciudad'])
-        ) {
+        if (empty($data['email']) || empty($data['password']) || empty($data['nombre']) || empty($data['apellido']) || empty($data['ciudad'])) 
+        {
             return "Todos los campos son obligatorios.";
         }
 

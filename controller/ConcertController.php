@@ -5,7 +5,8 @@ class ConcertController
 
     public function __construct()
     {
-        try {
+        try 
+        {
             // Conexión inicial sin base de datos
             $pdo = new PDO("mysql:host=localhost", "root", "");
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -19,7 +20,8 @@ class ConcertController
             
             // Crear la tabla artists si no existe 
             $this->conn->exec("
-                CREATE TABLE IF NOT EXISTS artists (
+                CREATE TABLE IF NOT EXISTS artists 
+                (
                     id_artist INT AUTO_INCREMENT PRIMARY KEY,
                     name VARCHAR(255) NOT NULL UNIQUE,
                     genre VARCHAR(100),
@@ -31,11 +33,13 @@ class ConcertController
             $stmt = $this->conn->query("SELECT COUNT(*) FROM artists");
 
             $tableArtistsExisted = false;
-            if ($stmt->fetchColumn() != 0) {
+            if ($stmt->fetchColumn() != 0) 
+            {
                 $tableArtistsExisted = true;
             }
 
-            if ($tableArtistsExisted == false) {
+            if ($tableArtistsExisted == false) 
+            {
                 $insertArtists = "
                     INSERT INTO artists (name, genre, banner_image) VALUES
                     ('ACDC', 'Rock', '../../media/img/concert_banners/acdc.jpg'),
@@ -75,7 +79,8 @@ class ConcertController
                 )
             ");
 
-        } catch (PDOException $e) {
+        } catch (PDOException $e) 
+        {
             die("Connection failed: " . $e->getMessage());
         }
     }
@@ -86,7 +91,7 @@ class ConcertController
         $stmt = $this->conn->prepare("INSERT INTO concerts (name, location, date, time, price, id_artist) VALUES (?, ?, ?, ?, ?, ?)");
         return $stmt->execute([$name, $location, $date, $time, $price, $id_artist]);
     }
-
+    
     // READ (Todos los conciertos y todos los artistas)--
     public function getAllConcerts()
     {
@@ -98,7 +103,7 @@ class ConcertController
         $stmt = $this->conn->query("SELECT * FROM artists ORDER BY name ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
+    
     // READ (Todos los conciertos por artista)
     public function getConcertsByArtist($id_artist)
     {
