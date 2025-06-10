@@ -27,6 +27,7 @@ class UserController
                     name VARCHAR(100),
                     surname VARCHAR(100),
                     city VARCHAR(100) NOT NULL,
+                    phone VARCHAR(100) NOT NULL,
                     id_role INT,
                     profile_photo VARCHAR(255)
                 )
@@ -111,7 +112,7 @@ class UserController
     // ✅ NUEVO CAMPO DE CIUDAD + VALIDACIÓN DE EMAIL + REGEX EN LA CONTRASEÑA ✅
     private function register($data, $role_id)
     {
-        if (empty($data['email']) || empty($data['password']) || empty($data['nombre']) || empty($data['apellido']) || empty($data['ciudad'])) 
+        if (empty($data['email']) || empty($data['password']) || empty($data['nombre']) || empty($data['apellido']) || empty($data['ciudad']) || empty($data['telefono'])) 
         {
             return "Todos los campos son obligatorios.";
         }
@@ -132,6 +133,7 @@ class UserController
             $name = $data['nombre'];
             $surname = $data['apellido'];
             $city = $data['ciudad'];
+            $phone = $data['telefono'];
             $profilePhoto = '';
 
             try 
@@ -144,10 +146,10 @@ class UserController
                 }
 
                 $stmt = $this->conn->prepare("
-                    INSERT INTO users (email, password, name, surname, city, id_role, profile_photo)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO users (email, password, name, surname, city, phone, id_role, profile_photo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 ");
-                $stmt->execute([$email, $password, $name, $surname, $city, $role_id, $profilePhoto]);
+                $stmt->execute([$email, $password, $name, $surname, $city, $phone, $role_id, $profilePhoto]);
 
                 header("Location: login.php");
                 exit;

@@ -64,6 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="input-group">
                     <input type="text" name="ciudad" placeholder="Ciudad" required>
                 </div>
+                
+                <!--✅ NUEVO CAMPO DE TELEFONO ✅-->
+                <div class="input-group">
+                    <input type="text" name="telefono" placeholder="Telefono" required>
+                </div>
 
                 <div class="buttons">
                     <button type="submit" class="button">Registrar</button>

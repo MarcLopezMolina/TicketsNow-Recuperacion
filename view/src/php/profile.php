@@ -77,6 +77,8 @@ $surname = $user['surname'];
 $email = $user['email'];
 // ✅ NUEVO CAMPO DE CIUDAD ✅
 $city = $user['city']; 
+// ✅ NUEVO CAMPO DE TELEFONO ✅
+$phone = $user['phone']; 
 $photo = $user['profile_photo'] ?: '../../media/img/Interfaces/user_icon.png';
 $role = $user['id_role'];
 ?>
@@ -167,6 +169,12 @@ $role = $user['id_role'];
         <div class="info-group">
             <label>Ciudad</label>
             <span><?php echo htmlspecialchars($city); ?></span>
+        </div>
+
+        <!--✅ NUEVO CAMPO DE TELEFONO ✅-->
+        <div class="info-group">
+            <label>Telefono</label>
+            <span><?php echo htmlspecialchars($phone); ?></span>
         </div>
 
         <?php if ($role == 3): ?>
