@@ -3,13 +3,15 @@ CREATE DATABASE IF NOT EXISTS ticketsnow;
 USE ticketsnow;
 
 -- Crear tabla de roles
-CREATE TABLE IF NOT EXISTS roles (
+CREATE TABLE IF NOT EXISTS roles 
+(
     id_role INT AUTO_INCREMENT PRIMARY KEY,
     rol_name VARCHAR(25) NOT NULL
 );
 
 -- Crear tabla de usuarios con campo ciudad
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS users 
+(
     id_user INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(25) NOT NULL,
     surname VARCHAR(25) NOT NULL,
@@ -22,7 +24,8 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Crear tabla de artistas
-CREATE TABLE IF NOT EXISTS artists (
+CREATE TABLE IF NOT EXISTS artists 
+(
     id_artist INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
     genre VARCHAR(100),
@@ -30,7 +33,8 @@ CREATE TABLE IF NOT EXISTS artists (
 );
 
 -- Crear tabla de conciertos
-CREATE TABLE IF NOT EXISTS concerts (
+CREATE TABLE IF NOT EXISTS concerts 
+(
     id_concert INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     location VARCHAR(255) NOT NULL,

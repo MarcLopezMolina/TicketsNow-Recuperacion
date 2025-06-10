@@ -31,7 +31,8 @@ class UserController
                     profile_photo VARCHAR(255)
                 )
             ");
-        } catch (PDOException $e) 
+        } 
+        catch (PDOException $e) 
         {
             die("Connection failed: " . $e->getMessage());
         }
