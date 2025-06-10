@@ -151,7 +151,7 @@ class UserController
                 header("Location: login.php");
                 exit;
             } 
-            catch (PDOException $e) 
+            catch (PDOException $e)
             {
                 return "Error al registrar: " . $e->getMessage();
             }
