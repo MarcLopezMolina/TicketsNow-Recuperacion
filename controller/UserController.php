@@ -160,10 +160,18 @@ class UserController
                 return "La contraseña debe tener exactamente 6 caracteres y al menos un número.";
             }
 
+            //Validación de DNI con regex --> 8 números y al 1 letra.
             if (!preg_match('/^\d{8}[A-Za-z]$/', $dni)) 
             {
                 return "El DNI debe tener 8 números seguidos de una letra.";
             }
+
+            //Validación de TELEFONO con regex --> 9 números exactos.
+            if (!preg_match('/^\d{9}$/', $telefono))  
+            {
+                return "El Teléfono debe tener exactamente 9 números.";
+            }
+
 
 
             $password = password_hash($rawPassword, PASSWORD_DEFAULT);
