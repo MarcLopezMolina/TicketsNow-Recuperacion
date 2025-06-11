@@ -36,6 +36,7 @@ $name = $userObject->getName();
 $surname = $userObject->getSurname();
 $email = $userObject->getEmail();
 $dni = $userObject->getDni();
+$telefono = $userObject->getTelefono(); //<!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
 
 // Obtener foto de perfil y rol
 $stmt = $pdo->prepare("SELECT profile_photo, id_role FROM users WHERE id_user = :id");
@@ -168,6 +169,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["profile_photo"])) {
         <div class="info-group">
             <label>DNI</label>
             <span><?php echo htmlspecialchars($userObject->getDni()); ?></span>
+        </div>
+
+        <!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
+        <div class="info-group">
+            <label>Telefono</label>
+            <span><?php echo htmlspecialchars($userObject->getTelefono()); ?></span>
         </div>
 
         <?php if ($role == 3): ?>

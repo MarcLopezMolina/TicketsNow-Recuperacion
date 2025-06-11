@@ -22,6 +22,7 @@ class UserController
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // Crear tabla users si no existe
+            //<!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
             $this->conn->exec("
                 CREATE TABLE IF NOT EXISTS users (
                     id_user INT AUTO_INCREMENT PRIMARY KEY,
@@ -30,6 +31,7 @@ class UserController
                     name VARCHAR(100),
                     surname VARCHAR(100),
                     dni VARCHAR(100) NOT NULL,
+                    telefono VARCHAR(100) NOT NULL,
                     id_role INT,
                     profile_photo VARCHAR(255)
                 )
@@ -41,7 +43,7 @@ class UserController
         }
     }
     
-    // 🔥 NUUEVO 🔥
+    //<!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
     public function getUserById($id_user): ?User
     {
         $stmt = $this->conn->prepare("SELECT * FROM users WHERE id_user = :id");
@@ -53,6 +55,7 @@ class UserController
                 $data['name'],
                 $data['surname'],
                 $data['dni'],
+                $data['telefono'],
                 $data['email'],
                 $data['password']
             );
@@ -91,7 +94,9 @@ class UserController
 
                 header('Location: profile.php');
                 exit();
-            } else {
+            } 
+            else 
+            {
                 return "Correo o contraseña incorrectos.";
             }
         } 
@@ -135,8 +140,8 @@ class UserController
     //VALIDACIÓN DE EMAIL + REGEX EN LA CONTRASEÑA
     private function register($data, $role_id)
     {
-        //<!--✅ NUEVO CAMPO DE DNI ✅-->
-        if (empty($data['email']) || empty($data['password']) || empty($data['nombre']) || empty($data['apellido']) || empty($data['dni'])) 
+        //<!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
+        if (empty($data['email']) || empty($data['password']) || empty($data['nombre']) || empty($data['apellido']) || empty($data['dni']) || empty($data['telefono'])) 
         {
             return "Todos los campos son obligatorios.";
         }
@@ -146,7 +151,8 @@ class UserController
         {
             $email = $data['email'];
             $rawPassword = $data['password'];
-            $dni = $data['dni']; //<!--✅ NUEVO CAMPO DE DNI ✅-->
+            $dni = $data['dni']; 
+            $telefono = $data['telefono']; //<!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
 
             //Validación de contraseña con regex --> 6 carácteres y al menos 1 número.
             if (!preg_match('/^(?=.*\d)[A-Za-z\d]{6}$/', $rawPassword)) 
@@ -154,7 +160,6 @@ class UserController
                 return "La contraseña debe tener exactamente 6 caracteres y al menos un número.";
             }
 
-            //<!--✅ NUEVO CAMPO DE DNI ✅-->
             if (!preg_match('/^\d{8}[A-Za-z]$/', $dni)) 
             {
                 return "El DNI debe tener 8 números seguidos de una letra.";
@@ -164,7 +169,8 @@ class UserController
             $password = password_hash($rawPassword, PASSWORD_DEFAULT);
             $name = $data['nombre'];
             $surname = $data['apellido'];
-            $dni = $data['dni']; //<!--✅ NUEVO CAMPO DE DNI ✅-->
+            $dni = $data['dni'];
+            $telefono = $data['telefono']; //<!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
             $profilePhoto = '';
 
             try 
@@ -176,12 +182,12 @@ class UserController
                     return "El correo electrónico ya está registrado.";
                 }
 
-                //<!--✅ NUEVO CAMPO DE DNI ✅-->
+                //<!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
                 $stmt = $this->conn->prepare("
-                    INSERT INTO users (email, password, name, surname, dni, id_role, profile_photo)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO users (email, password, name, surname, dni, telefono, id_role, profile_photo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 ");
-                $stmt->execute([$email, $password, $name, $surname, $dni, $role_id, $profilePhoto]);
+                $stmt->execute([$email, $password, $name, $surname, $dni, $telefono, $role_id, $profilePhoto]);
 
                 header("Location: login.php");
                 exit;
