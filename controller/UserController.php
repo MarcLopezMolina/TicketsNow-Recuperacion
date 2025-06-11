@@ -149,7 +149,7 @@ class UserController
         //Validación de email con FILTER_VALIDATE_EMAIL
         if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) 
         {
-            $email = $data['email'];
+            
             $rawPassword = $data['password'];
             $dni = $data['dni']; 
             $telefono = $data['telefono']; //<!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
@@ -171,12 +171,12 @@ class UserController
             {
                 return "El Teléfono debe tener exactamente 9 números.";
             }
-
-
+            
 
             $password = password_hash($rawPassword, PASSWORD_DEFAULT);
             $name = $data['nombre'];
             $surname = $data['apellido'];
+            $email = $data['email'];
             $dni = $data['dni'];
             $telefono = $data['telefono']; //<!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
             $profilePhoto = '';
