@@ -122,12 +122,20 @@ class UserController
         {
             $email = $data['email'];
             $rawPassword = $data['password'];
+            $dni = $data['dni']; //<!--✅ NUEVO CAMPO DE DNI ✅-->
 
             //Validación de contraseña con regex --> 6 carácteres y al menos 1 número.
             if (!preg_match('/^(?=.*\d)[A-Za-z\d]{6}$/', $rawPassword)) 
             {
                 return "La contraseña debe tener exactamente 6 caracteres y al menos un número.";
             }
+
+            //<!--✅ NUEVO CAMPO DE DNI ✅-->
+            if (!preg_match('/^\d{8}[A-Za-z]$/', $dni)) 
+            {
+                return "El DNI debe tener 8 números seguidos de una letra.";
+            }
+
 
             $password = password_hash($rawPassword, PASSWORD_DEFAULT);
             $name = $data['nombre'];
