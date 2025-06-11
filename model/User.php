@@ -4,16 +4,15 @@ class User
 {
     private $name;
     private $surname;
-    private $city;
-    private $phone;
+    private $dni;
     private $email;
     private $password;
 
-    public function __construct($name, $surname, $city, $phone, $email, $password){
+    public function __construct($name, $surname, $dni, $email, $password)
+    {
         $this->name = $name;
         $this->surname = $surname;
-        $this->city = $city;
-        $this->phone = $phone;
+        $this->dni = $dni;
         $this->email = $email;
         $this->password = $password;
     }
@@ -39,24 +38,14 @@ class User
         $this->surname = $surname;
     }
 
-    public function getCity()
+    public function getDni()
     {
-        return $this->city;
+        return $this->dni;
     }
 
-    public function setCity($city)
+    public function setDni($dni)
     {
-        $this->city = $city;
-    }
-
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
+        $this->dni = $dni;
     }
 
     public function getEmail()

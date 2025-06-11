@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../../../controller/UserController.php';
+require_once __DIR__ . '/../../../model/User.php';
 
 if (!isset($_SESSION['logged_in']) || !isset($_SESSION['id_user'])) {
     header('Location: login.php');
@@ -8,10 +9,11 @@ if (!isset($_SESSION['logged_in']) || !isset($_SESSION['id_user'])) {
 }
 
 $controller = new UserController();
+$id_user = $_SESSION['id_user'];
 
 // Si se ha enviado el formulario de borrar cuenta
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_account'])) {
-    $controller->deleteUser($_SESSION['id_user']);
+    $controller->deleteUser($id_user);
     exit();
 }
 
@@ -24,8 +26,25 @@ try {
 
 $errorMsg = "";
 
-$id_user = $_SESSION['id_user'];
+// Obtener el usuario como objeto
+$userObject = $controller->getUserById($id_user);
+if (!$userObject) {
+    die("Usuario no encontrado.");
+}
 
+$name = $userObject->getName();
+$surname = $userObject->getSurname();
+$email = $userObject->getEmail();
+$dni = $userObject->getDni();
+
+// Obtener foto de perfil y rol
+$stmt = $pdo->prepare("SELECT profile_photo, id_role FROM users WHERE id_user = :id");
+$stmt->execute([':id' => $id_user]);
+$extras = $stmt->fetch(PDO::FETCH_ASSOC);
+$photo = $extras['profile_photo'] ?: '../../media/img/Interfaces/user_icon.png';
+$role = $extras['id_role'];
+
+// Subida de nueva foto de perfil
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["profile_photo"])) {
     $targetDir = __DIR__ . '/../../media/img/profile_pictures/';
     $fileName = time() . '_' . basename($_FILES["profile_photo"]["name"]);
@@ -63,22 +82,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["profile_photo"])) {
         }
     }
 }
-
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id_user = :id");
-$stmt->execute([':id' => $id_user]);
-$user = $stmt->fetch();
-
-if (!$user) 
-{
-    die("Usuario no encontrado.");
-}
-
-$name = $user['name'];
-$surname = $user['surname'];
-$email = $user['email'];
-$dni = $user['dni'];//<!--✅ NUEVO CAMPO DE DNI ✅-->
-$photo = $user['profile_photo'] ?: '../../media/img/Interfaces/user_icon.png';
-$role = $user['id_role'];
 ?>
 
 <!DOCTYPE html>
@@ -152,21 +155,19 @@ $role = $user['id_role'];
 
         <div class="info-group">
             <label>Nombre</label>
-            <span><?php echo htmlspecialchars($name); ?></span>
+            <span><?php echo htmlspecialchars($userObject->getName()); ?></span>
         </div>
         <div class="info-group">
             <label>Apellido</label>
-            <span><?php echo htmlspecialchars($surname); ?></span>
+            <span><?php echo htmlspecialchars($userObject->getSurname()); ?></span>
         </div>
         <div class="info-group">
             <label>Correo electrónico</label>
-            <span><?php echo htmlspecialchars($email); ?></span>
+            <span><?php echo htmlspecialchars($userObject->getEmail()); ?></span>
         </div>
-
-        <!--✅ NUEVO CAMPO DE DNI ✅-->
         <div class="info-group">
             <label>DNI</label>
-            <span><?php echo htmlspecialchars($dni); ?></span>
+            <span><?php echo htmlspecialchars($userObject->getDni()); ?></span>
         </div>
 
         <?php if ($role == 3): ?>

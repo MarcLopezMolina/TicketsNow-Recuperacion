@@ -1,4 +1,7 @@
 <?php
+
+require_once __DIR__ . '/../model/User.php';
+
 class UserController
 {
     private $conn;
@@ -38,6 +41,27 @@ class UserController
         }
     }
     
+    // 🔥 NUUEVO 🔥
+    public function getUserById($id_user): ?User
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE id_user = :id");
+        $stmt->execute([':id' => $id_user]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            $user = new User(
+                $data['name'],
+                $data['surname'],
+                $data['dni'],
+                $data['email'],
+                $data['password']
+            );
+            return $user;
+        }
+
+        return null;
+    }
+
     public function login() 
     {
         if (empty($_POST['email']) || empty($_POST['password'])) 
