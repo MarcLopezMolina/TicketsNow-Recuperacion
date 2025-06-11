@@ -76,7 +76,7 @@ if (!$user)
 $name = $user['name'];
 $surname = $user['surname'];
 $email = $user['email'];
-$dni = $user['dni'];
+$dni = $user['dni'];//<!--✅ NUEVO CAMPO DE DNI ✅-->
 $photo = $user['profile_photo'] ?: '../../media/img/Interfaces/user_icon.png';
 $role = $user['id_role'];
 ?>

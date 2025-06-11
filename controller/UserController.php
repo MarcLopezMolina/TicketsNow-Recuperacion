@@ -108,22 +108,22 @@ class UserController
         return $this->register($data, 3);
     }
 
-    // ✅ NUEVO CAMPO DE CIUDAD + VALIDACIÓN DE EMAIL + REGEX EN LA CONTRASEÑA ✅
+    //VALIDACIÓN DE EMAIL + REGEX EN LA CONTRASEÑA
     private function register($data, $role_id)
     {
-
+        //<!--✅ NUEVO CAMPO DE DNI ✅-->
         if (empty($data['email']) || empty($data['password']) || empty($data['nombre']) || empty($data['apellido']) || empty($data['dni'])) 
         {
             return "Todos los campos son obligatorios.";
         }
         
-        // ✅ Validación de email con FILTER_VALIDATE_EMAIL
+        //Validación de email con FILTER_VALIDATE_EMAIL
         if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) 
         {
             $email = $data['email'];
             $rawPassword = $data['password'];
 
-            // ✅ Validación de contraseña con regex --> 6 carácteres y al menos 1 número.
+            //Validación de contraseña con regex --> 6 carácteres y al menos 1 número.
             if (!preg_match('/^(?=.*\d)[A-Za-z\d]{6}$/', $rawPassword)) 
             {
                 return "La contraseña debe tener exactamente 6 caracteres y al menos un número.";
@@ -132,7 +132,7 @@ class UserController
             $password = password_hash($rawPassword, PASSWORD_DEFAULT);
             $name = $data['nombre'];
             $surname = $data['apellido'];
-            $dni = $data['dni'];
+            $dni = $data['dni']; //<!--✅ NUEVO CAMPO DE DNI ✅-->
             $profilePhoto = '';
 
             try 
@@ -144,6 +144,7 @@ class UserController
                     return "El correo electrónico ya está registrado.";
                 }
 
+                //<!--✅ NUEVO CAMPO DE DNI ✅-->
                 $stmt = $this->conn->prepare("
                     INSERT INTO users (email, password, name, surname, dni, id_role, profile_photo)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
