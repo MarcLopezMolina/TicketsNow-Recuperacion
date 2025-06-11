@@ -112,6 +112,7 @@ class UserController
     // ✅ NUEVO CAMPO DE CIUDAD + VALIDACIÓN DE EMAIL + REGEX EN LA CONTRASEÑA ✅
     private function register($data, $role_id)
     {
+
         if (empty($data['email']) || empty($data['password']) || empty($data['nombre']) || empty($data['apellido']) || empty($data['ciudad']) || empty($data['telefono'])) 
         {
             return "Todos los campos son obligatorios.";
