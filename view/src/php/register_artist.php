@@ -56,10 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="input-group">
                     <input type="text" name="apellido" placeholder="Apellido" required>
                 </div>
-
-                <!--✅ NUEVO CAMPO DE CIUDAD ✅-->
+                
+                <!--✅ NUEVO CAMPO DE DNI ✅-->
                 <div class="input-group">
-                    <input type="text" name="ciudad" placeholder="Ciudad" required>
+                    <input type="text" name="dni" placeholder="DNI" required>
                 </div>
 
                 <div class="buttons">

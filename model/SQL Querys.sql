@@ -9,15 +9,15 @@ CREATE TABLE IF NOT EXISTS roles
     rol_name VARCHAR(25) NOT NULL
 );
 
--- Crear tabla de usuarios con campo ciudad
+-- Crear tabla de usuarios
 CREATE TABLE IF NOT EXISTS users 
 (
     id_user INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(25) NOT NULL,
     surname VARCHAR(25) NOT NULL,
-    city VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    dni VARCHAR(100) NOT NULL,
     id_role INT NOT NULL,
     profile_photo VARCHAR(255),
     FOREIGN KEY (id_role) REFERENCES roles(id_role)

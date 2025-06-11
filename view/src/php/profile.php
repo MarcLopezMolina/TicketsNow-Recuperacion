@@ -68,17 +68,15 @@ $stmt = $pdo->prepare("SELECT * FROM users WHERE id_user = :id");
 $stmt->execute([':id' => $id_user]);
 $user = $stmt->fetch();
 
-if (!$user) {
+if (!$user) 
+{
     die("Usuario no encontrado.");
 }
 
 $name = $user['name'];
 $surname = $user['surname'];
 $email = $user['email'];
-// ✅ NUEVO CAMPO DE CIUDAD ✅
-$city = $user['city']; 
-// ✅ NUEVO CAMPO DE TELEFONO ✅
-$phone = $user['phone']; 
+$dni = $user['dni'];
 $photo = $user['profile_photo'] ?: '../../media/img/Interfaces/user_icon.png';
 $role = $user['id_role'];
 ?>
@@ -164,17 +162,11 @@ $role = $user['id_role'];
             <label>Correo electrónico</label>
             <span><?php echo htmlspecialchars($email); ?></span>
         </div>
-        
-        <!--✅ NUEVO CAMPO DE CIUDAD ✅-->
-        <div class="info-group">
-            <label>Ciudad</label>
-            <span><?php echo htmlspecialchars($city); ?></span>
-        </div>
 
-        <!--✅ NUEVO CAMPO DE TELEFONO ✅-->
+        <!--✅ NUEVO CAMPO DE DNI ✅-->
         <div class="info-group">
-            <label>Telefono</label>
-            <span><?php echo htmlspecialchars($phone); ?></span>
+            <label>DNI</label>
+            <span><?php echo htmlspecialchars($dni); ?></span>
         </div>
 
         <?php if ($role == 3): ?>
