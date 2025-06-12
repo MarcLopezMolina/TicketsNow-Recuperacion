@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!--🆕 NUEVO CAMPO DE TELEFONO 🆕-->
                 <div class="input-group">
-                    <input type="number" name="telefono" placeholder="Telefono" required>
+                    <input type="number" name="telefono" placeholder="Telefono">
                 </div>
 
                 <div class="buttons">
