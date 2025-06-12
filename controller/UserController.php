@@ -166,10 +166,10 @@ class UserController
                 return "El DNI debe tener 8 números seguidos de una letra.";
             }
 
-            //Validación de TELEFONO con regex --> 9 números exactos.
-            if (!preg_match('/^\d{9}$/', $telefono))  
+            //Validación de TELEFONO con regex --> 11 números exactos.
+            if (!preg_match('/^\d{11}$/', $telefono))  
             {
-                return "El Teléfono debe tener exactamente 9 números.";
+                return "El Teléfono debe tener exactamente 11 números.";
             }
             
 
